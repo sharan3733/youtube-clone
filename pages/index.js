@@ -5,10 +5,12 @@ import Videos from './components/Videos'
 import Heading from './components/Heading'
 import LoadMore from './components/LoadMore'
 import { useState } from 'react'
+import { amount } from '@/lib/config'
 
 
 export default function Index({ initialVideos }) {
   const [videos, setVideos] = useState(initialVideos)
+  const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount)
   return (
     <div>
   
@@ -17,7 +19,12 @@ export default function Index({ initialVideos }) {
         <p className='flex justify-center mt-20'>No videos found!</p>
       )}
       <Videos videos={videos}/>
-      <LoadMore videos={videos} setVideos={setVideos}/>
+      {!reachedEnd &&(
+      <LoadMore videos={videos} 
+      setVideos={setVideos}
+      setReachedEnd={setReachedEnd}
+      />
+      )}
      
       </div>
   )

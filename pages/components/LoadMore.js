@@ -1,6 +1,6 @@
 import { amount } from "@/lib/config"
 
-export default function LoadMore({videos, setVideos}){
+export default function LoadMore({videos, setVideos, setReachedEnd}){
     return (
         <div className= 'flex justify-center'>
             <button
@@ -9,6 +9,9 @@ export default function LoadMore({videos, setVideos}){
                 const url = `/api/videos?skip=${videos.length}`
                 const res = await fetch(url)
                 const data = await res.json()
+                if (data.length < amount) {
+                    setReachedEnd(true)
+                }
                 setVideos([...videos, ...data])
             }}
             >

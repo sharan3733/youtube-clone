@@ -21,8 +21,8 @@ export default async function handler(req, res) {
             usersCount++
         }
 
-        const videoURL = 'https://bootcamp-sharanjeet.fra1.digitaloceanspaces.com/SampleVideo_1280*720_5mb.mp4'
-        const thumbnailURL = 'https://bootcamp-sharanjeet.fra1.digitaloceanspaces.com/dog.png'
+        const videoURL = 'https://bootcamp-sharanjeet.fra1.digitaloceanspaces.com/SampleVideo_360x240_5mb.mp4'
+        const thumbnailURL = 'https://bootcamp-sharanjeet.fra1.digitaloceanspaces.com/img.jpeg'
 
         const users = await prisma.user.findMany()
 

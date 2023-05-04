@@ -1,13 +1,14 @@
 import prisma from "@/lib/prisma";
-import { getVideo } from "@/lib/data";
+import { getVideo, getVideos } from "@/lib/data";
 import Link from "next/link";
 import timeago from "@/lib/timeago";
+import Video from "../components/Video";
 
 import dynamic from "next/dynamic";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
-export default function SingleVideo({ video }) {
+export default function SingleVideo({ video, videos }) {
   if (!video) return <p className="text-center p-5">Video does not exist</p>;
   return (
     <>
@@ -19,7 +20,7 @@ export default function SingleVideo({ video }) {
         </header>
 
         <div className="h-screen flex">
-          <div className="flex w-full flex-col mb-4 border-t border-r border-b border-3 border-black pl-0 bg-black">
+          <div className="flex w-full md:w-2/3 flex-col mb-4 border-t border-r border-b border-3 border-black pl-0 bg-black">
             <div className="relative pt-[60%]">
               <ReactPlayer
                 className="react-player absolute top-0 left-0"
@@ -54,6 +55,15 @@ export default function SingleVideo({ video }) {
                 </div>
             </div>
           </div>
+          <div className="hidden md:block md:w-1/3">
+            <div className="flex flex-wrap">
+                {videos.map((video, index) => (
+                    <div className="w-full" key={index}>
+                        <Video video={video}/>
+                    </div>
+                ))}
+            </div>
+          </div>
         </div>
      
       
@@ -62,12 +72,16 @@ export default function SingleVideo({ video }) {
 }
 
 export async function getServerSideProps(context) {
-  let video = await getVideo(context.params.id, prisma);
-  video = JSON.parse(JSON.stringify(video));
+  let video = await getVideo(context.params.id, prisma)
+  video = JSON.parse(JSON.stringify(video))
+
+  let videos = await getVideos({}, prisma)
+  videos = JSON.parse(JSON.stringify(videos))
 
   return {
     props: {
       video,
+      videos,
     },
-  };
+  }
 }

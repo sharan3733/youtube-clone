@@ -1,11 +1,15 @@
 import prisma from 'lib/prisma'
 import { getUser, getVideos } from 'lib/data.js'
-
+import { useState } from 'react'
 import Videos from '../components/Videos'
 import Link from 'next/link'
 import Heading from '../components/Heading'
+import LoadMore from '../components/LoadMore'
+import { amount } from '@/lib/config'
 
-export default function Channel({ user, videos }) {
+export default function Channel({ user, initialvideos }) {
+    const [videos, setVideos] = useState(initialVideos)
+    const [reachedEnd, setReachedEnd] = useState(initialVideos.length<amount)
   if (!user) return <p className='text-center p-5'>Channel does not exist 😞</p>
 
   return (
@@ -27,6 +31,14 @@ export default function Channel({ user, videos }) {
         </div>
         <div>
           <Videos videos={videos} />
+          {!reachedEnd && (
+            <LoadMore
+            videos={videos}
+            setVideos={setVideos}
+            setReachedEnd={setReachedEnd}
+            author={user}
+            />
+          )}
         </div>
       </div>
     </>
@@ -43,7 +55,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      videos,
+      initialVideos: videos,
       user,
     },
   }

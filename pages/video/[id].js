@@ -75,7 +75,8 @@ export async function getServerSideProps(context) {
   let video = await getVideo(context.params.id, prisma)
   video = JSON.parse(JSON.stringify(video))
 
-  let videos = await getVideos({}, prisma)
+  let videos = await getVideos({ take: 3 }, prisma)
+
   videos = JSON.parse(JSON.stringify(videos))
 
   return {

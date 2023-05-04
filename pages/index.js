@@ -3,9 +3,12 @@ import { getVideos } from '@/lib/data'
 import prisma from '@/lib/prisma'
 import Videos from './components/Videos'
 import Heading from './components/Heading'
+import LoadMore from './components/LoadMore'
+import { useState } from 'react'
 
 
-export default function Index({ videos }) {
+export default function Index({ initialVideos }) {
+  const [videos, setVideos] = useState(initialVideos)
   return (
     <div>
   
@@ -14,6 +17,8 @@ export default function Index({ videos }) {
         <p className='flex justify-center mt-20'>No videos found!</p>
       )}
       <Videos videos={videos}/>
+      <LoadMore videos={videos} setVideos={setVideos}/>
+     
       </div>
   )
 }
@@ -24,7 +29,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      videos,
+     initialVideos: videos,
     },
   }
 }

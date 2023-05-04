@@ -3,19 +3,14 @@ import { getUser, getVideos } from 'lib/data.js'
 
 import Videos from '../components/Videos'
 import Link from 'next/link'
+import Heading from '../components/Heading'
 
 export default function Channel({ user, videos }) {
   if (!user) return <p className='text-center p-5'>Channel does not exist 😞</p>
 
   return (
     <>
-      <header className='h-14 flex pt-5 px-5 pb-2'>
-        <Link href={`/`} className='underline'>
-					Home
-        </Link>
-
-        <div className='grow'></div>
-      </header>
+      <Heading/>
       <div>
         <div className='flex justify-between'>
           <div className='flex m-5'>

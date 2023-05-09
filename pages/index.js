@@ -6,11 +6,23 @@ import Heading from './components/Heading'
 import LoadMore from './components/LoadMore'
 import { useState } from 'react'
 import { amount } from '@/lib/config'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 
 export default function Index({ initialVideos }) {
+  const {data: session, status} = useSession()
+  const router = useRouter()
   const [videos, setVideos] = useState(initialVideos)
   const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount)
+
+  const loading = status ==='loading'
+  if(loading) {
+    return null
+  }
+  if (session && !session.user.name) {
+    router.push('/setup')
+  }
   return (
     <div>
   

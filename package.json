@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.325.0",
+    "@aws-sdk/client-s3": "^3.329.0",
     "@next-auth/prisma-adapter": "^1.0.6",
     "autoprefixer": "10.4.14",
     "eslint": "8.39.0",

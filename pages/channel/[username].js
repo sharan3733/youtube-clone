@@ -7,14 +7,14 @@ import Heading from '../components/Heading'
 import LoadMore from '../components/LoadMore'
 import { amount } from '@/lib/config'
 
-export default function Channel({ user, initialvideos }) {
-    const [videos, setVideos] = useState(initialVideos)
-    const [reachedEnd, setReachedEnd] = useState(initialVideos.length<amount)
+export default function Channel({ user, initialVideos }) {
+  const [videos, setVideos] = useState(initialVideos)
+  const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount)
   if (!user) return <p className='text-center p-5'>Channel does not exist 😞</p>
 
   return (
     <>
-      <Heading/>
+      <Heading />
       <div>
         <div className='flex justify-between'>
           <div className='flex m-5'>
@@ -33,10 +33,10 @@ export default function Channel({ user, initialvideos }) {
           <Videos videos={videos} />
           {!reachedEnd && (
             <LoadMore
-            videos={videos}
-            setVideos={setVideos}
-            setReachedEnd={setReachedEnd}
-            author={user}
+              videos={videos}
+              setVideos={setVideos}
+              setReachedEnd={setReachedEnd}
+              author={user}
             />
           )}
         </div>
@@ -47,10 +47,10 @@ export default function Channel({ user, initialvideos }) {
 
 export async function getServerSideProps(context) {
   let user = await getUser(context.params.username, prisma)
-	user = JSON.parse(JSON.stringify(user))
+  user = JSON.parse(JSON.stringify(user))
 
   let videos = await getVideos({ author: user.id }, prisma)
-	videos = JSON.parse(JSON.stringify(videos))
+  videos = JSON.parse(JSON.stringify(videos))
 
 
   return {

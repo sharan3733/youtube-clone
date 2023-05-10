@@ -4,7 +4,7 @@ import nextConnect from "next-connect"
 import { authOptions } from "./auth/[...nextauth]"
 import prisma from "@/lib/prisma"
 
-import { upload } from "@/lib/upload"
+import upload from "@/lib/upload"
 
 
 const handler = nextConnect()

@@ -1,6 +1,6 @@
-import { AuthOptions } from 'next-auth'
+import prisma from 'lib/prisma'
+import { authOptions } from 'pages/api/auth/[...nextauth].js'
 import { getServerSession } from 'next-auth/next'
-import prisma from '@/lib/prisma'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

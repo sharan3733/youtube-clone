@@ -6,14 +6,24 @@ import Link from 'next/link'
 import Heading from '../components/Heading'
 import LoadMore from '../components/LoadMore'
 import { amount } from '@/lib/config'
+import SubscribedButton from '../components/SubscribedButton'
+import { useSession } from 'next-auth/react'
 
 export default function Channel({ user, initialVideos, subscribers }) {
   const [videos, setVideos] = useState(initialVideos)
   const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount)
+  const { data: session, status } = useSession()
+
+  const loading = status === 'loading'
+
+  if (loading) {
+    return null
+  }
   if (!user) return <p className='text-center p-5'>Channel does not exist 😞</p>
 
   return (
     <>
+     
       <Heading />
       <div>
         <div className='flex justify-between'>
@@ -24,17 +34,28 @@ export default function Channel({ user, initialVideos, subscribers }) {
                 src={user.image}
               />
             )}
-            <div className=''>
-              <div className=''>
-                <div className='text-gray-400'>{subscribers} subscribers</div>
-              </div>
-            </div>
+
             <div className='mt-5'>
               <p className='text-lg font-bold text-white'>{user.name}</p>
+              <div className=''>
+                <div className=''>
+                  <div className='text-gray-400'>{subscribers} subscribers</div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div className='mt-12 mr-5'>
+            {session && user.id === session.user.id ? (
+              <></>
+            ) : (
+              <SubscribedButton user={user} />
+            )}
+          </div>
+
         </div>
         <div>
+
           <Videos videos={videos} />
           {!reachedEnd && (
             <LoadMore

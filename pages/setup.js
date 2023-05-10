@@ -15,7 +15,9 @@ export default function Setup() {
     if (!session || !session.user) return null
     if (loading) return null
 
-
+    if (!loading && session.user.name) {
+        router.push('/')
+    }
 
     return (
         <form

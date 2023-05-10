@@ -48,6 +48,7 @@ export default function Subscriptions({ initialVideos }) {
                     videos={videos}
                     setVideos={setVideos}
                     setReachedEnd={setReachedEnd}
+                    subscriptions={session.user.id}
                 />
             )}
         </div>

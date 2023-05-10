@@ -1,28 +1,33 @@
 import { amount } from "@/lib/config"
+import Subscriptions from "../subscriptions"
 
 export default function LoadMore({
-    videos, 
-    setVideos, 
+    videos,
+    setVideos,
     setReachedEnd,
     author,
- }){
+    subscriptions,
+}) {
     return (
-        <div className= 'flex justify-center'>
+        <div className='flex justify-center'>
             <button
-            className="border px-8 py-2 my-10 mr-2 font-bold rounded-full"
-            onClick={async () =>{
-                let url = `/api/videos?skip=${videos.length}`
-                if(author) {
-                    url += `&author=${author.id}`
-                }
-                const res = await fetch(url)
-                const data = await res.json()
-                if (data.length < amount) {
-                    setReachedEnd(true)
-                }
-                setVideos([...videos, ...data])
-            }}
-            >
+                className="border px-8 py-2 my-10 mr-2 font-bold rounded-full"
+                onClick={async () => {
+                    let url = `/api/videos?skip=${videos.length}`
+                    if (author) {
+                        url += `&author=${author.id}`
+                    }
+                    if (Subscriptions) {
+                        url += `&subscriptions=${subscriptions}`
+                    }
+                    const res = await fetch(url)
+                    const data = await res.json()
+                    if (data.length < amount) {
+                        setReachedEnd(true)
+                    }
+                    setVideos([...videos, ...data])
+                }}
+            >    
                 Load more
             </button>
         </div>

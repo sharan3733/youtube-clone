@@ -1,5 +1,5 @@
 import prisma from 'lib/prisma'
-import { getUser, getVideos } from 'lib/data.js'
+import { getUser, getVideos, getSubsribersCount } from 'lib/data.js'
 import { useState } from 'react'
 import Videos from '../components/Videos'
 import Link from 'next/link'
@@ -7,7 +7,7 @@ import Heading from '../components/Heading'
 import LoadMore from '../components/LoadMore'
 import { amount } from '@/lib/config'
 
-export default function Channel({ user, initialVideos }) {
+export default function Channel({ user, initialVideos, subscribers }) {
   const [videos, setVideos] = useState(initialVideos)
   const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount)
   if (!user) return <p className='text-center p-5'>Channel does not exist 😞</p>
@@ -24,6 +24,11 @@ export default function Channel({ user, initialVideos }) {
                 src={user.image}
               />
             )}
+            <div className=''>
+              <div className=''>
+                <div className='text-gray-400'>{subscribers} subscribers</div>
+              </div>
+            </div>
             <div className='mt-5'>
               <p className='text-lg font-bold text-white'>{user.name}</p>
             </div>
@@ -52,11 +57,14 @@ export async function getServerSideProps(context) {
   let videos = await getVideos({ author: user.id }, prisma)
   videos = JSON.parse(JSON.stringify(videos))
 
+  const subscribers = await getSubsribersCount(context.params.username, prisma)
+
 
   return {
     props: {
       initialVideos: videos,
       user,
+      subscribers,
     },
   }
 }

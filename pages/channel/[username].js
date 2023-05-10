@@ -1,5 +1,5 @@
 import prisma from 'lib/prisma'
-import { getUser, getVideos, getSubsribersCount } from 'lib/data.js'
+import { getUser, getVideos, getSubsribersCount, isSubscribed } from 'lib/data.js'
 import { useState } from 'react'
 import Videos from '../components/Videos'
 import Link from 'next/link'
@@ -8,8 +8,10 @@ import LoadMore from '../components/LoadMore'
 import { amount } from '@/lib/config'
 import SubscribedButton from '../components/SubscribedButton'
 import { useSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]'
 
-export default function Channel({ user, initialVideos, subscribers }) {
+export default function Channel({ user, initialVideos, subscribers, subscribed }) {
   const [videos, setVideos] = useState(initialVideos)
   const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount)
   const { data: session, status } = useSession()
@@ -23,7 +25,7 @@ export default function Channel({ user, initialVideos, subscribers }) {
 
   return (
     <>
-     
+
       <Heading />
       <div>
         <div className='flex justify-between'>
@@ -49,7 +51,7 @@ export default function Channel({ user, initialVideos, subscribers }) {
             {session && user.id === session.user.id ? (
               <></>
             ) : (
-              <SubscribedButton user={user} />
+              <SubscribedButton user={user} subscribed={subscribed} />
             )}
           </div>
 
@@ -79,6 +81,12 @@ export async function getServerSideProps(context) {
   videos = JSON.parse(JSON.stringify(videos))
 
   const subscribers = await getSubsribersCount(context.params.username, prisma)
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  let subscribed = null
+  if (session) {
+    subscribed = await isSubscribed(session.user.username, user.id, prisma)
+  }
 
 
   return {
@@ -86,6 +94,7 @@ export async function getServerSideProps(context) {
       initialVideos: videos,
       user,
       subscribers,
+      subscribed,
     },
   }
 }

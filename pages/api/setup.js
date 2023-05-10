@@ -4,7 +4,7 @@ import nextConnect from "next-connect"
 import { authOptions } from "./auth/[...nextauth]"
 import prisma from "@/lib/prisma"
 
-import { upload } from "../../lib/upload"
+import { upload } from "@/lib/upload"
 
 
 const handler = nextConnect()
@@ -19,10 +19,11 @@ handler.post(async (req, res) => {
             id: session.user.id,
         },
     })
-    console.log("user found" + JSON.stringify(user));
+    console.log("user found: " + JSON.stringify(user));
 
     if (!user) return res.status(401).json({ message: 'User not found' })
-
+    console.log("name: " + req.body.name[0]);
+    console.log("username: " + req.body.username[0]);
     await prisma.user.update({
         where: { id: user.id },
         data: {
@@ -34,6 +35,9 @@ handler.post(async (req, res) => {
 
     if (req.files && req.files.image[0]) {
         console.log("files present image present");
+        console.log(req.files.image[0].path)
+        console.log(req.files.image[0].originalFilename);
+
         const avatar_url = await upload(
             req.files.image[0].path,
             req.files.image[0].originalFilename,

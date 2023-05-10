@@ -15,9 +15,7 @@ export default function Setup() {
     if (!session || !session.user) return null
     if (loading) return null
 
-    if (!loading && session.user.name) {
-        router.push('/')
-    }
+
 
     return (
         <form
@@ -50,6 +48,17 @@ export default function Setup() {
                     required
                 />
             </div>
+            <div className='flex-1 mb-5'>
+                <div className='flex-1 mb-5'>Username</div>
+                <input
+                    type='text'
+                    name='username'
+                    onChange={(e) => setUsername(e.target.value)}
+                    className='border p-1 text-black'
+                    required
+                />
+            </div>
+
             <div className="text-sm text-gray-600">
                 <label className="relative font-medium cursor-pointer underline my-3 block">
                     {!imageURL && <p className=''>Avatar</p>}
